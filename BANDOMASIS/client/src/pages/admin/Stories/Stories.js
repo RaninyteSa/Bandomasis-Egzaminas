@@ -10,7 +10,7 @@ const Stories = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios.get('/api/Stories/')
+        axios.get('/api/stories/')
         .then(resp => setStories(resp.data))
         .catch(error => {
             console.log(error)
@@ -23,7 +23,7 @@ const Stories = () => {
 
     const handleDelete = (id) => {
         
-          axios.delete('/api/Stories/delete/' + id)
+          axios.delete('/api/stories/delete/' + id)
           .then(resp => {
             setAlert({
                 message:resp.data,
@@ -97,7 +97,7 @@ const Stories = () => {
                     <tbody>
                         {Stories.map(stories => 
                             <tr key={stories.id}>
-                                <td>{stories.id}</td>
+                               
                                 <td>{stories.story}</td>
                                 <td>{stories.sum}</td>
                            

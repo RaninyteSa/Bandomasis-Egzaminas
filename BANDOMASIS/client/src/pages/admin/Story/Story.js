@@ -5,7 +5,7 @@ import axios from 'axios'
 
 
 const Story = () => {
-    const [Story, setStory] = useState([])
+    const [story, setStory] = useState([])
     const { setAlert } = useContext(MainContext)
     const [refresh, setRefresh] = useState(false)
     const navigate = useNavigate()
@@ -24,7 +24,7 @@ const Story = () => {
 
     const handleDelete = (id) => {
         
-        axios.delete('/api/Story/delete/' + id)
+        axios.delete('/api/story/delete/' + id)
         .then(resp => {
           setAlert({
               message:resp.data,
@@ -55,7 +55,7 @@ const Story = () => {
         <>
             <h1>Visi Uzsakymai:</h1>
 
-            {Story ? 
+            {story ? 
                 <table className="table">
                     <thead>
                         <tr>
@@ -70,18 +70,18 @@ const Story = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {Story.map(order => 
-                            <tr key={order.id}>
-                                <td>{order.id}</td>
-                                    <td>{new Date(order.order_date).toLocaleString('lt-LT')}</td>
-                                    <td>{order.user && order.user.first_name + ' ' + order.user.last_name}</td>
-                                    <td>{order.service?.name}</td>
-                                    <td>{order.status? 'Patvirtintas' : 'Nepatvirtintas'}</td>
+                        {story.map(story => 
+                            <tr key={story.id}>
+                                <td>{story.id}</td>
+                                    <td>{new Date(story.story_date).toLocaleString('lt-LT')}</td>
+                                    <td>{story.user && story.user.first_name + ' ' + story.user.last_name}</td>
+                                    <td>{story.service?.name}</td>
+                                    <td>{story.status? 'Patvirtintas' : 'Nepatvirtintas'}</td>
                                     <td>
-                          <button onClick={() => handleDelete(order.id)} className="btn">Trinti</button>
+                          <button onClick={() => handleDelete(story.id)} className="btn">Trinti</button>
                           
                         </td>
-                        <td><Link className="link" to={'/admin/Story/edit/' + order.id} >Redaguoti</Link></td>
+                        <td><Link className="link" to={'/admin/Story/edit/' + story.id} >Redaguoti</Link></td>
                               
                             </tr>
                         )}

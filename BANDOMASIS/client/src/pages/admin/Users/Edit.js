@@ -104,7 +104,7 @@ const EditUsers = () => {
                         </div>
                     </div>
                     }
-                    <div className="form-group mb-2">
+                    {/* <div className="form-group mb-2">
                         <label className="mb-1">Grožio salonas:</label>
                         <select name="storiesId" onChange={handleForm} value={form.storiesId ? form. storiesId : ''}>
                             {stories.map(stories => 
@@ -112,7 +112,7 @@ const EditUsers = () => {
                             )}
                         </select>
                     
-                    </div>
+                    </div> */}
                     <button className="btn btn-primary">Išsaugoti</button>
                 </form>
             </div>

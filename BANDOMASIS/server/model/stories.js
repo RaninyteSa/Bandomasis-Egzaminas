@@ -13,7 +13,7 @@ const Stories = (sequelize) => {
         },
     
         sum: {
-            type: DataTypes.STRING, 
+            type: DataTypes.NUMBER, 
             allowNull: false
         }
     }

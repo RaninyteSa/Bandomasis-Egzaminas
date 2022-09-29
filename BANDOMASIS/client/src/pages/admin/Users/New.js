@@ -32,14 +32,14 @@ const NewWorker = () => {
       formData.append(key, form[key])
     }
 
-    axios.post('/api/workers/new', formData)
+    axios.post('/api/users/new', formData)
     .then(resp => {
         setAlert({
             message: resp.data,
             status: 'success'
         })
 
-        navigate('/admin/workers')
+        navigate('/admin/users')
     })
     .catch(error => {
         console.log(error)
