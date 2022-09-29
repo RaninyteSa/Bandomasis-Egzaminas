@@ -4,7 +4,7 @@ import axios from 'axios'
 import MainContext from '../../../context/MainContext'
 
 
-const Editusers = () => {
+const EditUsers = () => {
     const { setAlert } = useContext(MainContext)
     const { id } = useParams()
     const navigate = useNavigate()
@@ -13,10 +13,10 @@ const Editusers = () => {
         first_name: '',
         last_name: '',
         photo: '',
-        saloonId: ''
+      
     })
 
-    const [saloons, setSaloons] = useState([])
+    const [stories, setStories] = useState([])
 
     const handleForm = (e) => {
         setForm({ ...form, [e.target.name]: e.target.name === 'photo' ? e.target.files[0] : e.target.value })
@@ -66,8 +66,8 @@ const Editusers = () => {
     }, [id, setAlert])
 
     useEffect(() => {
-        axios.get('/api/saloons/')
-            .then(resp => setSaloons(resp.data))
+        axios.get('/api/stories/')
+            .then(resp => setStories(resp.data))
             .catch(error => {
                 setAlert({
                     message: error.response.data,
@@ -106,9 +106,9 @@ const Editusers = () => {
                     }
                     <div className="form-group mb-2">
                         <label className="mb-1">Grožio salonas:</label>
-                        <select name="saloonId" onChange={handleForm} value={form.saloonId ? form. saloonId : ''}>
-                            {saloons.map(saloon => 
-                                <option key={saloon.id} value={saloon.id}>{saloon.name}</option>
+                        <select name="storiesId" onChange={handleForm} value={form.storiesId ? form. storiesId : ''}>
+                            {stories.map(stories => 
+                                <option key={stories.id} value={stories.id}>{stories.name}</option>
                             )}
                         </select>
                     
@@ -120,4 +120,4 @@ const Editusers = () => {
     )
 }
 
-export default Editusers
+export default EditUsers

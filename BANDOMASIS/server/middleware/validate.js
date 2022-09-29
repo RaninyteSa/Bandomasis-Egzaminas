@@ -59,7 +59,8 @@ export const userValidator = (req, res, next) => {
     const schema = Joi.object({
         first_name: Joi.string().min(2).required(),
         last_name: Joi.string().min(2).required(),
-        photo: Joi.string().allow('')
+        photo: Joi.string().allow(''),
+        password: Joi.string().required()
     })
 
     validate(schema, req, res, next)

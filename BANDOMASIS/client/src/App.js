@@ -54,31 +54,31 @@ const App = () => {
       
         <Route path="admin" >
         <Route index element={<Stories />} />
-        <Route path="Stories/new" element={<NewStory />} />
-        <Route path="Stories/edit/:id" element={<EditStories />} />
+        <Route path="stories/new" element={<NewStory />} />
+        <Route path="stories/edit/:id" element={<EditStories />} />
         
-        <Route path="Users/edit/:id" element={<EditUsers />} />
-        <Route path='Story/edit/:id' element={<EditStory />} />
+        <Route path="users/edit/:id" element={<EditUsers />} />
+        <Route path='story/edit/:id' element={<EditStory />} />
       
-        <Route path='Users/new' element={<NewUser />} />
-        <Route path='Story/new' element={<NewStory />} />
+        <Route path='users/new' element={<NewUser />} />
+        <Route path='story/new' element={<NewStory />} />
    
-        <Route path="Users" element={<Users />} />
-        <Route path="Story" element={<Story />} />
+        <Route path="users" element={<Users />} />
+        <Route path="story" element={<Story />} />
         </Route>
         } 
         {userInfo.id  &&
         <>
-        <Route path='new-Story/:StoryId' element={<PublicNewStory/>} />
-        <Route path='Story' element={<PublicStory/>} />
+        <Route path='new-story/:storyId' element={<PublicNewStory/>} />
+        <Route path='story' element={<PublicStory/>} />
         </>
         }
         <Route path='register' element={<Register />} />
         <Route path='login' element={<Login />} />
         
        
-        <Route path='Stories' element={<PublicStories />} />
-        <Route path='Users' element={<PublicUsers />} />
+        <Route path='stories' element={<PublicStories />} />
+        <Route path='users' element={<PublicUsers />} />
         
       </Routes>
       </div>

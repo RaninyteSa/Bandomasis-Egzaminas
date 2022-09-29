@@ -1,22 +1,21 @@
 import { useState, useEffect, useContext } from "react"
-import { Link } from 'react-router-dom'
 import MainContext from "../context/MainContext"
 import axios from "axios"
-import NewSaloon from "./admin/Stories/New"
 
-const Saloons= () => {
 
-    const [ saloons, setSaloons] = useState([])
+const Stories= () => {
+
+    const [ Stories, setStories] = useState([])
     const { setAlert, userInfo } = useContext(MainContext)
     const [ sort, setSort ] = useState('')
 
     useEffect(() => {
-        let url = 'api/saloons/'
+        let url = 'api/Stories/'
         if (sort === '1' || sort === '2')
             url += '?sort=' + sort
      console.log(url);
         axios.get(url)
-        .then(resp => setSaloons(resp.data))
+        .then(resp => setStories(resp.data))
         .catch(error => {
             console.log(error)
             setAlert({
@@ -27,24 +26,18 @@ const Saloons= () => {
     },[sort])
     return (
     <>
-        <h1> Salonų sąrašas </h1>
+        <h1> Istorijų sąrašas </h1>
         <select onChange={(e) => setSort(e.target.value)}>
             <option>Pagal id</option>
             <option value="1">Pagal Pavadinimą a-ž</option>
             <option value="2">Pagal Pavadinimą ž-a</option>
         </select>
-        {saloons && saloons.map(saloon =>
-           <div key={saloon.id} style={{ marginBottom: 30, borderBottom: '3px solid black'}}>
-                <div><strong>{saloon.name}</strong ></div>
-                <div>{saloon.address}</div>
-                <div>{saloon.phone}</div>
-                <div>
-                    <Link 
-                        to={userInfo.id ? '/new-order/' + saloon.id : '/login'}
-                        >
-                            rezervuoti laiką
-                    </Link>
-                </div>
+        {Stories && Stories.map(stories =>
+           <div key={stories.id} style={{ marginBottom: 30, borderBottom: '3px solid black'}}>
+                <div><strong>{stories.story}</strong ></div>
+                <div>{stories.photo}</div>
+                <div>{stories.sum}</div>
+         
            </div> 
             
         )}
@@ -53,4 +46,4 @@ const Saloons= () => {
     )
 }
 
-export default Saloons
+export default Stories

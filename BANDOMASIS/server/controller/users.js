@@ -1,88 +1,73 @@
 import express from 'express'
-import Sequelize from 'sequelize'
+import bcrypt from 'bcrypt'
 import db from '../database/connect.js'
-import upload from '../middleware/multer.js'
-import { userValidator } from '../middleware/validate.js'
-import { adminAuth } from '../middleware/auth.js'
+import { registerValidator, loginValidator } from '../middleware/validate.js'
+import { auth } from '../middleware/auth.js' 
 
-const Router = express.Router()
+const router = express.Router()
 
-Router.get('/', async (req, res) => {
+router.post('/register', registerValidator, async (req, res) => {
     try {
-        const options = {
-            include: [
-                {
-                    model: db.Stories,
-                    attributes: ['story']
-                },
-             
-            ],
-          
-
+        const userExists = await db.Users.findOne({ 
+            where: { 
+                email: req.body.email 
+            } 
+        })
+        
+        if(userExists) {
+            res.status(401).send('Toks vartotojas jau egzistuoja')
+            return
         }
 
-        if(req.query.Stories)
-            options.where = {
-                StoriesId: req.query.Stories
-            }
+        req.body.password = await bcrypt.hash(req.body.password, 10)
 
-        const workers = await db.Workers.findAll(options)
-        res.json(workers)
+        await db.Users.create(req.body)
+        res.send('Vartotojas sėkmingai sukurtas')
+
     } catch(error) {
+
         console.log(error)
-        res.status(500).send('Įvyko klaida')
+        res.status(418).send('Įvyko serverio klaida')
     }
 })
 
-Router.get('/single/:id',adminAuth, async (req, res) => {
+router.post('/login', loginValidator, async (req, res) => {
     try {
-
-        const user = await db.Users.findByPk(req.params.id, {
-            attributes:['first_name', 'last_name', 'photo', 'StoriesId']
+        const user = await db.Users.findOne({ 
+            where: { 
+                email: req.body.email 
+            } 
         })
-        res.json(user)
+        
+        if(!user) 
+            return res.status(401).send('Toks vartotojas nerastas')
+
+        if(await bcrypt.compare(req.body.password, user.password)) {
+            req.session.loggedin = true
+            req.session.user = {
+                id: user.id,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                role: user.role
+            }
+            res.json({message: 'Prisijungimas sėkmingas', user: req.session.user})
+        } else {
+            res.status(401).send('Nepavyko prisijungti')
+        }
     } catch(error) {
         console.log(error)
-        res.status(500).send('Įvyko klaida')
+        res.status(418).send('Įvyko serverio klaida')
     }
 })
 
-Router.post('/new', adminAuth, upload.single('photo'), userValidator, async (req, res) => {
-    try {
-        if(req.file)
-            req.body.photo = '/uploads/' + req.file.filename
-
-        await db.users.create(req.body)
-        res.send('Darbuotojas sėkmingai išsaugotas')
-    } catch(error) {
-        console.log(error)
-        res.status(500).send('Įvyko klaida išssaugant duomenis')
-    }
+router.get('/logout', (req, res) => {
+    req.session.destroy()
+    res.send('Jūs sėkmingai atsijungėte, lauksime sugrįžtant :)')
 })
 
-Router.put('/edit/:id',adminAuth, upload.single('photo'), userValidator, async (req, res) => {
-    try {
-        if(req.file)
-            req.body.photo = '/uploads/' + req.file.filename
-
-        const user = await db.Users.findByPk(req.params.id)
-        await user.update(req.body)
-        res.send('Darbuotojas sėkmingai atnaujintas')
-    } catch(error) {
-        console.log(error)
-        res.status(500).send('Įvyko klaida išssaugant duomenis')
-    }
+router.get('/check-auth', auth, async (req, res) => {
+    res.json(req.session.user)
 })
 
-Router.delete('/delete/:id', adminAuth, async (req, res) => {
-    try {
-        const user = await db.Workers.findByPk(req.params.id)
-        await worker.destroy()
-        res.send('Darbuotojas sėkmingai ištrintas')
-    } catch(error) {
-        console.log(error)
-        res.status(500).send('Įvyko klaida')
-    }
-})
-
-export default Router
+export default router

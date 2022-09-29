@@ -68,7 +68,7 @@ const NewStory = () => {
 
     return(
         <>
-        <h1>Naujas uzsakymas {storiesId}</h1>
+        <h1>Nauja Istorija {storiesId}</h1>
             <form onSubmit={handleSubmit}>
             
 
@@ -76,12 +76,12 @@ const NewStory = () => {
                     <select name="userId"
                     onChange={handleForm}
                     >
-                        <option value='0'>Pasirinkite Darbuotoją</option>
+                        {/* <option value='0'>Pasirinkite Darbuotoją</option>
                         {Users.map(user => 
                             <option key={user.id} value={user.id}>
                             {user.first_name + ' ' + user.last_name}
                             </option>
-                        )} 
+                        )}  */}
                         
                     </select>
                 </div>

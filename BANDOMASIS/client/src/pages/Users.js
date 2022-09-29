@@ -1,32 +1,32 @@
 import { useState, useEffect, useContext } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+
 import MainContext from '../context/MainContext'
 import axios from 'axios'
 
-const Workers = () => {
-    const [ workers, setWorkers] = useState([])
+const Users = () => {
+    const [ users, setUsers] = useState([])
     const { setAlert } = useContext(MainContext)
-    const [ saloons, setSaloons ] = useState([])
+    const [ stories, setStories ] = useState([])
     const [selectedSorting, setSelctedSorting] = useState('0')
-    const [ slectedSaloon,  setSelectedSaloon ] = useState('0')
+    const [ slectedStories,  setSelectedStories ] = useState('0')
 
     const handleFilter = (e) => {
-        setSelectedSaloon(e.target.value)
+        setSelectedStories(e.target.value)
     }
 
-    const handleSorting = (e) => {
-        setSelctedSorting(e.target.value)
-    }
+    // const handleSorting = (e) => {
+    //     setSelctedSorting(e.target.value)
+    // }
 
   
 
     useEffect(() => {
-        let url = '/api/workers/?'
+        let url = '/api/users/?'
 
         const searchParams = new URLSearchParams()
 
-        if(slectedSaloon !== '0')
-            searchParams.append('saloon', slectedSaloon)
+        if(slectedStories !== '0')
+            searchParams.append('Stories', slectedStories)
         if(selectedSorting !== '0')
             searchParams.append('sorting', selectedSorting)
 
@@ -35,17 +35,17 @@ const Workers = () => {
             console.log(url)
             axios.get(url)
         .then(resp => {
-            // const workers = resp.data.map(worker =>  {
-            //     if(worker.ratings.length > 0) {
+            // const Users = resp.data.map(Users =>  {
+            //     if(Users.ratings.length > 0) {
             //         let sum = 0
-            //         worker.ratings.map(r => sum += r.rating )
-            //         worker.total_rating = (sum / worker.ratings.length).toFixed(2)
+            //         Users.ratings.map(r => sum += r.rating )
+            //         Users.total_rating = (sum / Users.ratings.length).toFixed(2)
             //     }
 
-            //     return worker
+            //     return Users
             // })
             
-           setWorkers(resp.data)
+           setUsers(resp.data)
         }) 
         .catch(error => {
             console.log(error)
@@ -54,12 +54,12 @@ const Workers = () => {
               status: 'danger'
             })
           })
-    }, [slectedSaloon, selectedSorting])
+    }, [slectedStories, selectedSorting])
 
     useEffect(() => {
-        axios.get('/api/saloons/')
+        axios.get('/api/stories/')
 
-        .then(resp => setSaloons(resp.data))
+        .then(resp => setStories(resp.data))
         .catch(error => {
             console.log(error)
             setAlert({
@@ -73,35 +73,26 @@ const Workers = () => {
     return (
         <>
         
-            <h1> Darbuotojų sąrašas: </h1>
+            <h1> Vartotojų sąrašas: </h1>
 
-            <div className='saloon'>
-            { saloons && 
+            <div className='stories'>
+            { stories && 
                 <select onChange={handleFilter}>
-                    <option value='0'>Pasirinkite saloną:</option>
-                    {saloons.map(saloon => 
-                        <option key={saloon.id} value={saloon.id}>{saloon.name}</option>
+                    <option value='0'>Pasirinkite istoriją:</option>
+                    {stories.map(stories => 
+                        <option key={stories.id} value={stories.id}>{stories.story}</option>
                     )}
                 </select>
             }
-            <select onChange={handleSorting}>
-                <option value="0">Pasirinkite rūšiavimą</option>
-                <option value="1">pagal įvertinimą didėjančia tvarka</option>
-                <option value="2">pagal įvertinimą mažėjančia tvarka</option>
-            </select>
+         
             </div>
-            <div  className='worker'>
-            { workers && workers.map(worker => 
-                <div key={worker.id}>
-                    <img className='wimg'src={worker.photo} />
-                    <h4>{worker.first_name + ' ' + worker.last_name}</h4>
-                    <div>{worker.saloon.name}</div>
-                    {worker.total_rating &&
-                        <div>Įvertinimas: {parseFloat(worker.total_rating).toFixed(2)}</div> 
-                    } 
-                    {!worker.total_rating &&
-                        <div>įvertinimų nėra 😇 </div>
-                    }
+            <div  className='users'>
+            { users && users.map(users => 
+                <div key={users.id}>
+                    <img className='wimg'src={users.photo} />
+                    <h4>{users.first_name + ' ' + users.last_name}</h4>
+                    <div>{users.Stories.name}</div>
+                  
                 </div>
                 
             )}
@@ -110,4 +101,4 @@ const Workers = () => {
     )
 }
 
-export default Workers
+export default Users

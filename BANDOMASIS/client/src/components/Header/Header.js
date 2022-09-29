@@ -64,7 +64,7 @@ const Header = () => {
 
                 <div>
                     <li>
-                        <Link to="/admin/users/new" className="nav-link px-2 text-dark">Naujas Darbuotojas</Link>
+                        <Link to="/admin/users/new" className="nav-link px-2 text-dark">Naujas Vartotojas</Link>
                     </li>
                 </div>
                 <div>
